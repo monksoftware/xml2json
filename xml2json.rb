@@ -28,6 +28,16 @@ describe "xml2json" do
       eq({ "a" => { "b" => { "x" => "Io", "c" => { "d" => "Hello", "e" => "World" } } } })
     )
   end
+
+  it "handles multiple elements" do
+    expect(xml2json('<a><b>Primo</b><b>Secondo</b></a>')).to(
+      eq({ "a" => { "b" => [ "Primo", "Secondo" ] } })
+    )
+
+    expect(xml2json('<a><x><b>Primo</b><b>Secondo</b></x></a>')).to(
+      eq({ "a" => { "x" => { "b" => [ "Primo", "Secondo" ] } } })
+    )
+  end
 end
 
 def xml2json xml
@@ -35,10 +45,16 @@ def xml2json xml
   hash = { doc.root.name => {} }
 
   doc.root.element_children.each do |node|
-    hash[doc.root.name][node.name] = if node.element_children.count == 0
-      node.text
+    if node.element_children.count == 0
+      if hash[doc.root.name].has_key?(node.name)
+        tmp = hash[doc.root.name][node.name]
+        hash[doc.root.name][node.name] = Array(tmp)
+        hash[doc.root.name][node.name] << node.text
+      else
+        hash[doc.root.name][node.name] = node.text
+      end
     else
-      node2json(node)
+      hash[doc.root.name][node.name] = node2json(node)
     end
   end
   hash
@@ -49,7 +65,13 @@ def node2json node
     if child.element_children.count > 0
       hash[child.name] = node2json(child)
     else
-      hash[child.name] = child.text
+      if hash.has_key?(child.name)
+        tmp = hash[child.name]
+        hash[child.name] = Array(tmp)
+        hash[child.name] << child.text
+      else
+        hash[child.name] = child.text
+      end
     end
   end
 end
