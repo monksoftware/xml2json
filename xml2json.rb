@@ -42,22 +42,9 @@ end
 
 def xml2json xml
   doc = Nokogiri.XML(xml)
-  hash = { doc.root.name => {} }
+  node = doc.root
 
-  doc.root.element_children.each do |node|
-    if node.element_children.count == 0
-      if hash[doc.root.name].has_key?(node.name)
-        tmp = hash[doc.root.name][node.name]
-        hash[doc.root.name][node.name] = Array(tmp)
-        hash[doc.root.name][node.name] << node.text
-      else
-        hash[doc.root.name][node.name] = node.text
-      end
-    else
-      hash[doc.root.name][node.name] = node2json(node)
-    end
-  end
-  hash
+  { node.name => node2json(node) }
 end
 
 def node2json node
