@@ -37,6 +37,10 @@ describe "xml2json" do
     expect(xml2json('<a><x><b>Primo</b><b>Secondo</b></x></a>')).to(
       eq({ "a" => { "x" => { "b" => [ "Primo", "Secondo" ] } } })
     )
+
+    expect(xml2json('<a><b><x>Primo</x></b><b><x>Secondo</x></b></a>')).to(
+      eq({ "a" => { "b" => [ { "x" => "Primo" }, { "x" => "Secondo" } ] } })
+    )
   end
 end
 
@@ -50,11 +54,19 @@ end
 def node2json node
   node.element_children.each_with_object({}) do |child, hash|
     if child.element_children.count > 0
-      hash[child.name] = node2json(child)
+      if hash.has_key?(child.name)
+        tmp = hash[child.name]
+        hash[child.name] = []
+        hash[child.name] << tmp
+        hash[child.name] << node2json(child)
+      else
+        hash[child.name] = node2json(child)
+      end
     else
       if hash.has_key?(child.name)
         tmp = hash[child.name]
-        hash[child.name] = Array(tmp)
+        hash[child.name] = []
+        hash[child.name] << tmp
         hash[child.name] << child.text
       else
         hash[child.name] = child.text
