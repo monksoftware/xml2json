@@ -1,13 +1,17 @@
 require 'nokogiri'
 
 class XML2JSON
-  def self.parse xml
-    root = Nokogiri.XML(xml).root
+  attr_reader :root, :hash
 
+  def initialize xml
+    @root = Nokogiri.XML(xml).root
+  end
+
+  def parse
     { root.name => node2json(root) }
   end
 
-  def self.node2json node
+  def node2json node
     node.element_children.each_with_object({}) do |child, hash|
       if child.element_children.count > 0
         if hash.has_key?(child.name)
