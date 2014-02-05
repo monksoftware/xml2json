@@ -2,6 +2,10 @@ require 'rspec/autorun'
 require 'xml2json'
 require 'json'
 
+def open_fixture_file(name)
+  File.read(File.join(Dir.pwd, 'spec', 'fixtures', name))
+end
+
 describe XML2JSON do
   it "parses xml into json" do
     xml = '<a><b><c>Hello</c><d>World</d></b></a>'
@@ -33,8 +37,8 @@ describe XML2JSON do
   end
 
   context "rss" do
-    let(:rss) { File.read(File.join(Dir.pwd, 'spec', 'fixtures', 'rss.xml')) }
-    let(:json) { JSON.parse(File.read(File.join(Dir.pwd, 'spec', 'fixtures', 'rss.json'))) }
+    let(:rss) { open_fixture_file('rss.xml') }
+    let(:json) { JSON.parse(open_fixture_file('rss.json')) }
 
     it "parses the rss into json" do
       expect(XML2JSON.new(rss).parse).to eq(json)
@@ -42,8 +46,8 @@ describe XML2JSON do
   end
 
   context "atom" do
-    let(:atom) { File.read(File.join(Dir.pwd, 'spec', 'fixtures', 'atom.xml')) }
-    let(:json) { JSON.parse(File.read(File.join(Dir.pwd, 'spec', 'fixtures', 'atom.json'))) }
+    let(:atom) { open_fixture_file('atom.xml') }
+    let(:json) { JSON.parse(open_fixture_file('atom.json')) }
 
     it "parses the atom into json" do
       expect(XML2JSON.new(atom).parse).to eq(json)
