@@ -63,7 +63,7 @@ describe XML2JSON do
     let(:atom) { SpecHelpers.open_fixture_file('atom.xml') }
     let(:json) { JSON.parse(SpecHelpers.open_fixture_file('atom.json')) }
 
-    xit "parses the atom into json" do
+    it "parses the atom into json" do
       expect(XML2JSON.parse(atom)).to eq(json)
     end
   end

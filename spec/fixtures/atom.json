@@ -1,7 +1,16 @@
 {
   "feed" : {
     "title" : "Giuseppe Modarelli",
-    "link" : ["", ""],
+    "link" : [
+      {
+        "_attributes" : { "href" : "http://gmodarelli.github.io/atom.xml", "rel" : "self" },
+        "_text" : ""
+      },
+      {
+        "_attributes" : { "href" : "http://gmodarelli.github.io/" },
+        "_text" : ""
+      }
+    ],
     "updated" : "2013-12-06T08:20:23-08:00",
     "id" : "http://gmodarelli.github.io",
     "author" : {
@@ -10,17 +19,29 @@
     "entry" : [
     {
       "title" : "Testing API with RSpec",
-      "link" : "",
+      "link" : {
+        "_attributes" : { "href" : "http://gmodarelli.github.io/posts/2013/12/06/testing-api-with-rspec.html" },
+        "_text" : ""
+      },
       "updated" : "2013-12-06T00:00:00-08:00",
       "id" : "http://gmodarelli.github.io/posts/2013/12/06/testing-api-with-rspec",
-      "content" : "Text"
+      "content" : {
+        "_attributes" : { "type" : "html" },
+        "_text" : "Text"
+      }
     },
     {
       "title" : "yield_successive_args with lots of args",
-      "link" : "",
+      "link" : {
+        "_attributes" : { "href" : "http://gmodarelli.github.io/posts/2013/09/18/yield-successive-args-with-lots-of-args.html" },
+        "_text" : ""
+      },
       "updated" : "2013-09-18T00:00:00-07:00",
       "id" : "http://gmodarelli.github.io/posts/2013/09/18/yield-successive-args-with-lots-of-args",
-      "content" : "Text"
+      "content" : {
+        "_attributes" : { "type" : "html" },
+        "_text" : "Text"
+      }
     }
     ]
   }
