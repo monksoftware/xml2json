@@ -9,15 +9,8 @@ module XML2JSON
   def self.node2json node
     node.element_children.each_with_object({}) do |child, hash|
 
-      has_children = child.element_children.count > 0
-
       if hash.has_key?(child.name)
-        if !hash[child.name].is_a?(Array)
-          tmp = hash[child.name]
-          hash[child.name] = []
-          hash[child.name] << tmp
-        end
-
+        node_to_nodes!(hash, child)
         hash[child.name] << parse_node(child)
       else
         hash[child.name] = parse_node(child)
@@ -35,11 +28,14 @@ module XML2JSON
   end
 
   def self.parse_attributes(node)
-    if node.attributes.empty?
-      {}
-    else
-      {"_attributes" => Hash[node.attributes.map { |k, v| [k, v.value] } ]}
+    node.attributes.empty? ? {} : {"_attributes" => Hash[node.attributes.map { |k, v| [k, v.value] } ]}
+  end
+
+  def self.node_to_nodes! hash, node
+    if !hash[node.name].is_a?(Array)
+      tmp = hash[node.name]
+      hash[node.name] = []
+      hash[node.name] << tmp
     end
   end
-  
 end
