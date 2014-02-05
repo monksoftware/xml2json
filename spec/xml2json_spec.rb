@@ -1,5 +1,5 @@
 require 'rspec/autorun'
-require_relative 'xml2json'
+require 'xml2json'
 require 'json'
 
 describe XML2JSON do
@@ -56,8 +56,8 @@ describe XML2JSON do
   end
 
   context "rss" do
-    let(:rss) { File.read('rss.xml') }
-    let(:json) { JSON.parse(File.read('rss.json')) }
+    let(:rss) { File.read(File.join(Dir.pwd, 'spec', 'fixtures', 'rss.xml')) }
+    let(:json) { JSON.parse(File.read(File.join(Dir.pwd, 'spec', 'fixtures', 'rss.json'))) }
 
     it "parses the rss into json" do
       expect(XML2JSON.new(rss).parse).to eq(json)
@@ -65,8 +65,8 @@ describe XML2JSON do
   end
 
   context "atom" do
-    let(:atom) { File.read('atom.xml') }
-    let(:json) { JSON.parse(File.read('atom.json')) }
+    let(:atom) { File.read(File.join(Dir.pwd, 'spec', 'fixtures', 'atom.xml')) }
+    let(:json) { JSON.parse(File.read(File.join(Dir.pwd, 'spec', 'fixtures', 'atom.json'))) }
 
     it "parses the atom into json" do
       expect(XML2JSON.new(atom).parse).to eq(json)
