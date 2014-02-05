@@ -8,25 +8,16 @@ module XML2JSON
 
   def self.node2json node
     node.element_children.each_with_object({}) do |child, hash|
-      if child.element_children.count > 0
-        if hash.has_key?(child.name)
-          tmp = hash[child.name]
-          hash[child.name] = []
-          hash[child.name] << tmp
-          hash[child.name] << node2json(child)
-        else
-          hash[child.name] = node2json(child)
-        end
+      has_children = child.element_children.count > 0
+      if hash.has_key?(child.name)
+        tmp = hash[child.name]
+        hash[child.name] = []
+        hash[child.name] << tmp
+        hash[child.name] << (has_children ? node2json(child) : child.text)
       else
-        if hash.has_key?(child.name)
-          tmp = hash[child.name]
-          hash[child.name] = []
-          hash[child.name] << tmp
-          hash[child.name] << child.text
-        else
-          hash[child.name] = child.text
-        end
+        hash[child.name] = (has_children ? node2json(child) : child.text)
       end
+    
     end
   end
 end
