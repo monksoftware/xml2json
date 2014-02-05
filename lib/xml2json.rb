@@ -4,7 +4,7 @@ module XML2JSON
   def self.parse xml
     root = Nokogiri.XML(xml).root
     json = { root.name => parse_node(root) }
-    json[root.name].merge!({ "_namespaces" => root.namespaces }) unless root.namespaces.empty?
+    json[root.name] = { "_namespaces" => root.namespaces }.merge(json[root.name]) unless root.namespaces.empty?
     json
   end
 
