@@ -17,11 +17,6 @@ describe XML2JSON do
   end
 
   it "handles multiple elements" do
-    xml = '<a><b>Primo</b><b>Secondo</b></a>'
-    expect(XML2JSON.parse(xml)).to(
-      eq({ "a" => { "b" => [ "Primo", "Secondo" ] } })
-    )
-
     xml = '<a><x><b>Primo</b><b>Secondo</b></x></a>'
     expect(XML2JSON.parse(xml)).to(
       eq({ "a" => { "x" => { "b" => [ "Primo", "Secondo" ] } } })
