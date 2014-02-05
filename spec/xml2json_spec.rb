@@ -33,6 +33,11 @@ describe XML2JSON do
     expect(XML2JSON.parse(xml)).to(
       eq({"r" => {"a" => { "_attributes" => {"url" => "www.google.it"}, "_text" => ""}}})
     )
+
+    xml = '<r><a url="www.google.it"><b>ciao</b></a></r>'
+    expect(XML2JSON.parse(xml)).to(
+      eq({"r" => {"a" => { "_attributes" => {"url" => "www.google.it"}, "b" => "ciao"}}})
+    )
   end
 
   context "rss" do

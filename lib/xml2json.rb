@@ -18,12 +18,17 @@ module XML2JSON
         if child.attributes.empty?
           hash[child.name] = (has_children ? node2json(child) : child.text)
         else
-          hash[child.name] = {
-            "_attributes" => Hash[child.attributes.map { |k, v| [k, v.value] } ],
-            "_text" => (has_children ? node2json(child) : child.text)
-          }
+          if has_children
+            hash[child.name] = parse_attributes(child).merge(node2json(child))
+          else
+            hash[child.name] = parse_attributes(child).merge({"_text" => child.text})
+          end
         end
       end
     end
+  end
+
+  def self.parse_attributes(node)
+    {"_attributes" => Hash[node.attributes.map { |k, v| [k, v.value] } ]}
   end
 end
