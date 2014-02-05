@@ -15,22 +15,19 @@ module XML2JSON
         tmp = hash[child.name]
         hash[child.name] = []
         hash[child.name] << tmp
-        
-        if has_children
-          hash[child.name] << parse_attributes(child).merge(node2json(child))
-        else
-          hash[child.name] << (child.attributes.empty? ? child.text : parse_attributes(child).merge({"_text" => child.text}))
-        end
-
+        hash[child.name] << parse_node(child)
       else
-        
-        if has_children
-          hash[child.name] = parse_attributes(child).merge(node2json(child))
-        else
-          hash[child.name] = (child.attributes.empty? ? child.text : parse_attributes(child).merge({"_text" => child.text}))
-        end
-
+        hash[child.name] = parse_node(child)
       end
+
+    end
+  end
+
+  def self.parse_node(node)
+    if node.element_children.count > 0
+      parse_attributes(node).merge(node2json(node))
+    else
+      (node.attributes.empty? ? node.text : parse_attributes(node).merge({"_text" => node.text}))
     end
   end
 
@@ -41,4 +38,5 @@ module XML2JSON
       {"_attributes" => Hash[node.attributes.map { |k, v| [k, v.value] } ]}
     end
   end
+  
 end
