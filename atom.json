@@ -1,0 +1,27 @@
+{
+  "feed" : {
+    "title" : "Giuseppe Modarelli",
+    "link" : ["", ""],
+    "updated" : "2013-12-06T08:20:23-08:00",
+    "id" : "http://gmodarelli.github.io",
+    "author" : {
+      "name" : "Giuseppe Modarelli"
+    },
+    "entry" : [
+    {
+      "title" : "Testing API with RSpec",
+      "link" : "",
+      "updated" : "2013-12-06T00:00:00-08:00",
+      "id" : "http://gmodarelli.github.io/posts/2013/12/06/testing-api-with-rspec",
+      "content" : "Text"
+    },
+    {
+      "title" : "yield_successive_args with lots of args",
+      "link" : "",
+      "updated" : "2013-09-18T00:00:00-07:00",
+      "id" : "http://gmodarelli.github.io/posts/2013/09/18/yield-successive-args-with-lots-of-args",
+      "content" : "Text"
+    }
+    ]
+  }
+}

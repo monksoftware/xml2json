@@ -1,0 +1,20 @@
+{
+  "rss" : {
+    "channel" : {
+      "title" : "Primo RSS",
+      "link" : "http://primorss.com",
+      "description" : "RSS Valido",
+      "item" : [
+      {
+        "title" : "Entry Title",
+        "description" : "Description",
+        "link" : "url"
+      }, {
+        "title" : "Entry Title 2",
+        "description" : "Description",
+        "link" : "url"
+      }
+      ]
+    }
+  }
+}

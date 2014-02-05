@@ -1,5 +1,6 @@
 require 'rspec/autorun'
 require_relative 'xml2json'
+require 'json'
 
 describe XML2JSON do
   it "parses xml into json" do
@@ -55,55 +56,20 @@ describe XML2JSON do
   end
 
   context "rss" do
-    let(:rss) {
-      <<-END_RSS
-      <rss version="2.0">
-        <channel>
-          <title>Primo RSS</title>
-          <link>http://primorss.com</link>
-          <description>RSS Valido</description>
-
-          <item>
-            <title>Entry Title</title>
-            <description>Description</description>
-            <link>url</link>
-          </item>
-
-          <item>
-            <title>Entry Title 2</title>
-            <description>Description</description>
-            <link>url</link>
-          </item>
-        </channel>
-      </rss>'
-      END_RSS
-    }
-
-    let(:json) {
-      {
-        "rss" => {
-          "channel" => {
-            "title" => "Primo RSS",
-            "link" => "http://primorss.com",
-            "description" => "RSS Valido",
-            "item" => [
-              {
-                "title" => "Entry Title",
-                "description" => "Description",
-                "link" => "url"
-              }, {
-                "title" => "Entry Title 2",
-                "description" => "Description",
-                "link" => "url"
-              }
-            ]
-          }
-        }
-      }
-    }
+    let(:rss) { File.read('rss.xml') }
+    let(:json) { JSON.parse(File.read('rss.json')) }
 
     it "parses the rss into json" do
       expect(XML2JSON.new(rss).parse).to eq(json)
+    end
+  end
+
+  context "atom" do
+    let(:atom) { File.read('atom.xml') }
+    let(:json) { JSON.parse(File.read('atom.json')) }
+
+    it "parses the atom into json" do
+      expect(XML2JSON.new(atom).parse).to eq(json)
     end
   end
 end

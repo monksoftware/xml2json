@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+ <title>Giuseppe Modarelli</title>
+ <link href="http://gmodarelli.github.io/atom.xml" rel="self"/>
+ <link href="http://gmodarelli.github.io/"/>
+ <updated>2013-12-06T08:20:23-08:00</updated>
+ <id>http://gmodarelli.github.io</id>
+ <author>
+   <name>Giuseppe Modarelli</name>
+ </author>
+
+ 
+ <entry>
+   <title>Testing API with RSpec</title>
+   <link href="http://gmodarelli.github.io/posts/2013/12/06/testing-api-with-rspec.html"/>
+   <updated>2013-12-06T00:00:00-08:00</updated>
+   <id>http://gmodarelli.github.io/posts/2013/12/06/testing-api-with-rspec</id>
+   <content type="html">Text</content>
+ </entry>
+ 
+ <entry>
+   <title>yield_successive_args with lots of args</title>
+   <link href="http://gmodarelli.github.io/posts/2013/09/18/yield-successive-args-with-lots-of-args.html"/>
+   <updated>2013-09-18T00:00:00-07:00</updated>
+   <id>http://gmodarelli.github.io/posts/2013/09/18/yield-successive-args-with-lots-of-args</id>
+   <content type="html">Text</content>
+ </entry>
+ 
+
+</feed>

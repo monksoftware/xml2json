@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Primo RSS</title>
+    <link>http://primorss.com</link>
+    <description>RSS Valido</description>
+
+    <item>
+      <title>Entry Title</title>
+      <description>Description</description>
+      <link>url</link>
+    </item>
+
+    <item>
+      <title>Entry Title 2</title>
+      <description>Description</description>
+      <link>url</link>
+    </item>
+  </channel>
+</rss>
