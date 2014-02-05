@@ -15,7 +15,7 @@ module XML2JSON
         hash[child.name] << tmp
         hash[child.name] << (has_children ? node2json(child) : child.text)
       else
-        hash[child.name] = (has_children ? node2json(child) : child.text)
+        hash[child.name] = {"_attributes" => child.attributes , "_text" => (has_children ? node2json(child) : child.text)}
       end
     
     end

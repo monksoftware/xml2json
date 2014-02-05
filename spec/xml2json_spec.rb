@@ -28,6 +28,13 @@ describe XML2JSON do
     )
   end
 
+  it "parses node attributes" do
+    xml = '<r><a url="www.google.it"></a></r>'
+    expect(XML2JSON.parse(xml)).to(
+      eq({"r" => {"a" => { "_attributes" => {"url" => "www.google.it"}, "_text" => ""}}})
+    )
+  end
+
   context "rss" do
     let(:rss) { SpecHelpers.open_fixture_file('rss.xml') }
     let(:json) { JSON.parse(SpecHelpers.open_fixture_file('rss.json')) }
