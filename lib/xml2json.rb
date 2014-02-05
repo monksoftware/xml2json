@@ -13,7 +13,15 @@ module XML2JSON
         tmp = hash[child.name]
         hash[child.name] = []
         hash[child.name] << tmp
-        hash[child.name] << (has_children ? node2json(child) : child.text)
+        if child.attributes.empty?
+          hash[child.name] << (has_children ? node2json(child) : child.text)
+        else
+          if has_children
+            hash[child.name] << parse_attributes(child).merge(node2json(child))
+          else
+            hash[child.name] << parse_attributes(child).merge({"_text" => child.text})
+          end
+        end
       else
         if child.attributes.empty?
           hash[child.name] = (has_children ? node2json(child) : child.text)
