@@ -15,9 +15,15 @@ module XML2JSON
         hash[child.name] << tmp
         hash[child.name] << (has_children ? node2json(child) : child.text)
       else
-        hash[child.name] = {"_attributes" => child.attributes , "_text" => (has_children ? node2json(child) : child.text)}
+        if child.attributes.empty?
+          hash[child.name] = (has_children ? node2json(child) : child.text)
+        else
+          hash[child.name] = {
+            "_attributes" => Hash[child.attributes.map { |k, v| [k, v.value] } ],
+            "_text" => (has_children ? node2json(child) : child.text)
+          }
+        end
       end
-    
     end
   end
 end
