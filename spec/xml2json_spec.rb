@@ -75,7 +75,7 @@ describe XML2JSON do
     let(:rss) { SpecHelpers.open_fixture_file('rss.xml') }
     let(:json) { JSON.parse(SpecHelpers.open_fixture_file('rss.json')) }
 
-    xit "parses the rss into json" do
+    it "parses the rss into json" do
       expect(XML2JSON.parse(rss)).to eq(json)
     end
   end

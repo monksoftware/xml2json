@@ -45,10 +45,14 @@ module XML2JSON
   end
 
   def self.namespaced_node_name node
+    "#{prefix(node)}#{node.name}"
+  end
+
+  def self.prefix node
     if !node.namespace.nil? && !node.namespace.prefix.nil? && !node.namespace.prefix.strip.empty?
-      "#{node.namespace.prefix}:#{node.name}"
+      "#{node.namespace.prefix}:"
     else
-      node.name
+      ""
     end
   end
 end
