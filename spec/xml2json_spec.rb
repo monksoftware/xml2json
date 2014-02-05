@@ -4,32 +4,9 @@ require 'json'
 
 describe XML2JSON do
   it "parses xml into json" do
-    xml = '<a><b>Hello</b></a>'
-    expect(XML2JSON.new(xml).parse).to eq({ "a" => { "b" => "Hello" } })
-
-    xml = '<a><b>Hello</b><c>World</c></a>'
-    expect(XML2JSON.new(xml).parse).to(
-      eq({ "a" => { "b" => "Hello", "c" => "World" } })
-    )
-
-    xml = '<a><b><c>World</c></b></a>'
-    expect(XML2JSON.new(xml).parse).to(
-      eq({ "a" => { "b" => { "c" => "World" } } })
-    )
-
     xml = '<a><b><c>Hello</c><d>World</d></b></a>'
     expect(XML2JSON.new(xml).parse).to(
       eq({ "a" => { "b" => { "c" => "Hello", "d" => "World" } } })
-    )
-
-    xml = '<a><b><c><d>World</d></c></b></a>'
-    expect(XML2JSON.new(xml).parse).to(
-      eq({ "a" => { "b" => { "c" => { "d" => "World" } } } })
-    )
-
-    xml = '<a><b><c><d>Hello</d><e>World</e></c></b></a>'
-    expect(XML2JSON.new(xml).parse).to(
-      eq({ "a" => { "b" => { "c" => { "d" => "Hello", "e" => "World" } } } })
     )
 
     xml = '<a><b><x>Io</x><c><d>Hello</d><e>World</e></c></b></a>'
