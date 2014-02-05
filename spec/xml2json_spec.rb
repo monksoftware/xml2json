@@ -55,6 +55,13 @@ describe XML2JSON do
     )
   end
 
+  it "parses root attributes" do
+    xml = '<r id="1"><a>Hello</a></r>'
+    expect(XML2JSON.parse(xml)).to(
+      eq({"r" => {"_attributes" => { "id" => "1" }, "a" => "Hello" } })
+    )
+  end
+
   context "rss" do
     let(:rss) { SpecHelpers.open_fixture_file('rss.xml') }
     let(:json) { JSON.parse(SpecHelpers.open_fixture_file('rss.json')) }

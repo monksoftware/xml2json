@@ -3,7 +3,20 @@ require 'nokogiri'
 module XML2JSON
   def self.parse xml
     root = Nokogiri.XML(xml).root
-    { root.name => node2json(root) }
+    { root.name => parse_node(root) }
+  end
+
+
+  def self.parse_node(node)
+    if node.element_children.count > 0
+      parse_attributes(node).merge(node2json(node))
+    else
+      (node.attributes.empty? ? node.text : parse_attributes(node).merge({"_text" => node.text}))
+    end
+  end
+
+  def self.parse_attributes(node)
+    node.attributes.empty? ? {} : {"_attributes" => Hash[node.attributes.map { |k, v| [k, v.value] } ]}
   end
 
   def self.node2json node
@@ -17,18 +30,6 @@ module XML2JSON
       end
 
     end
-  end
-
-  def self.parse_node(node)
-    if node.element_children.count > 0
-      parse_attributes(node).merge(node2json(node))
-    else
-      (node.attributes.empty? ? node.text : parse_attributes(node).merge({"_text" => node.text}))
-    end
-  end
-
-  def self.parse_attributes(node)
-    node.attributes.empty? ? {} : {"_attributes" => Hash[node.attributes.map { |k, v| [k, v.value] } ]}
   end
 
   def self.node_to_nodes! hash, node
