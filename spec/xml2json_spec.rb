@@ -26,6 +26,11 @@ describe XML2JSON do
     expect(XML2JSON.parse(xml)).to(
       eq({ "a" => { "b" => [ { "x" => "Primo" }, { "x" => "Secondo" } ] } })
     )
+
+    xml = '<a><b><x>Primo</x></b><b><x>Secondo</x></b><b><x>Terzo</x></b></a>'
+    expect(XML2JSON.parse(xml)).to(
+      eq({ "a" => { "b" => [ { "x" => "Primo" }, { "x" => "Secondo" }, { "x" => "Terzo" }] } })
+    )
   end
 
   it "parses node attributes" do
