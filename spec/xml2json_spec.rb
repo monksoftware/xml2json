@@ -62,6 +62,15 @@ describe XML2JSON do
     )
   end
 
+  context "namespaces" do
+    let(:xml) { '<r xmlns:content="http://purl.org/rss/1.0/modules/content/"><content:encoded>Hello</content:encoded><content:encoded>World</content:encoded></r>' }
+    it "parses namespaced node names" do
+      expect(XML2JSON.parse(xml)).to(
+        eq({"r" => { "_namespaces" => { "xmlns:content" => "http://purl.org/rss/1.0/modules/content/" }, "content:encoded" => [ "Hello", "World" ] } })
+      )
+    end
+  end
+
   context "rss" do
     let(:rss) { SpecHelpers.open_fixture_file('rss.xml') }
     let(:json) { JSON.parse(SpecHelpers.open_fixture_file('rss.json')) }

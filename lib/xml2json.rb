@@ -3,7 +3,9 @@ require 'nokogiri'
 module XML2JSON
   def self.parse xml
     root = Nokogiri.XML(xml).root
-    { root.name => parse_node(root) }
+    json = { root.name => parse_node(root) }
+    json[root.name].merge!({ "_namespaces" => root.namespaces }) unless root.namespaces.empty?
+    json
   end
 
 
@@ -21,22 +23,32 @@ module XML2JSON
 
   def self.node2json node
     node.element_children.each_with_object({}) do |child, hash|
+      key = namespaced_node_name child
 
-      if hash.has_key?(child.name)
+      if hash.has_key?(key)
         node_to_nodes!(hash, child)
-        hash[child.name] << parse_node(child)
+        hash[key] << parse_node(child)
       else
-        hash[child.name] = parse_node(child)
+        hash[key] = parse_node(child)
       end
 
     end
   end
 
   def self.node_to_nodes! hash, node
-    if !hash[node.name].is_a?(Array)
-      tmp = hash[node.name]
-      hash[node.name] = []
-      hash[node.name] << tmp
+    key = namespaced_node_name(node)
+    if !hash[key].is_a?(Array)
+      tmp = hash[key]
+      hash[key] = []
+      hash[key] << tmp
+    end
+  end
+
+  def self.namespaced_node_name node
+    if !node.namespace.nil? && !node.namespace.prefix.nil? && !node.namespace.prefix.strip.empty?
+      "#{node.namespace.prefix}:#{node.name}"
+    else
+      node.name
     end
   end
 end

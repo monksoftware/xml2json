@@ -1,5 +1,6 @@
 {
   "feed" : {
+    "_namespaces": { "xmlns" : "http://www.w3.org/2005/Atom" },
     "title" : "Giuseppe Modarelli",
     "link" : [
       {
