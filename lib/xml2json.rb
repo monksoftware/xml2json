@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'json'
 
 module XML2JSON
   class InvalidXML < StandardError; end
@@ -11,9 +12,9 @@ module XML2JSON
     end
 
     root = doc.root
-    json = { root.name => parse_node(root) }
-    json[root.name] = { "_namespaces" => root.namespaces }.merge(json[root.name]) unless root.namespaces.empty?
-    json
+    hash = { root.name => parse_node(root) }
+    hash[root.name] = { "_namespaces" => root.namespaces }.merge(hash[root.name]) unless root.namespaces.empty?
+    hash.to_json
   end
 
 
