@@ -1,8 +1,16 @@
 require 'nokogiri'
 
 module XML2JSON
+  class InvalidXML < StandardError; end
+
   def self.parse xml
-    root = Nokogiri.XML(xml).root
+    begin
+      doc = Nokogiri.XML(xml) { |config| config.strict }
+    rescue Nokogiri::XML::SyntaxError
+      raise InvalidXML.new
+    end
+
+    root = doc.root
     json = { root.name => parse_node(root) }
     json[root.name] = { "_namespaces" => root.namespaces }.merge(json[root.name]) unless root.namespaces.empty?
     json

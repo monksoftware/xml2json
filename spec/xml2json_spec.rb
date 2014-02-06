@@ -88,4 +88,18 @@ describe XML2JSON do
       expect(XML2JSON.parse(atom)).to eq(json)
     end
   end
+
+  context "invalid xml file" do
+    it "raises an exception if the xml file is bad formed" do
+      xml = '<invalid></xml>'
+      expect {
+        XML2JSON.parse(xml)
+      }.to raise_error XML2JSON::InvalidXML
+
+      xml = 'not xml file'
+      expect {
+        XML2JSON.parse(xml)
+      }.to raise_error XML2JSON::InvalidXML
+    end
+  end
 end
