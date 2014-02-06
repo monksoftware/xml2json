@@ -12,11 +12,6 @@ Add this to your Gemfile
 
 `XML2JSON.parse(xml_string)`
 
-### to get a json object
-		
-		require 'json'
-		XML2JSON.parse(xml_string).to_json
-
 ## Examples
 	
 		xml = '<?xml version="1.0" encoding="utf-8"?>
@@ -29,3 +24,4 @@ Add this to your Gemfile
 
 output
 
+		{"root":{"author":[{"name":"Andrea", "email":"andrea@wearemonk.com"},{"name":"Giuseppe", "email":"giuseppe@wearemonk.com"}]}}
