@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = XML2JSON::VERSION
   spec.authors       = ["Giuseppe Modarelli", "Andrea D'Ippolito"]
   spec.email         = ["giuseppe.modarelli@gmail.com","adedip@gmail.com"]
-  spec.summary       = %q{short summary. Required.}
-  spec.description   = %q{longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = %q{Transforms XML into JSON}
+  spec.description   = %q{}
+  spec.homepage      = "https://github.com/monksoftware/xml2json"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
