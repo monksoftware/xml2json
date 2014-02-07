@@ -1,5 +1,7 @@
 # xml2json
 
+[![Code Climate](https://codeclimate.com/github/monksoftware/xml2json.png)](https://codeclimate.com/github/monksoftware/xml2json)
+
 Transforms XML into JSON
 
 ## Installation
