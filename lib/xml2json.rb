@@ -75,14 +75,13 @@ module XML2JSON
     end
   end
 
-  @@configuration = Configuration.new
-
   def self.configuration
-    @@configuration
+    @configuration ||= begin
+                         Configuration.new
+                       end
   end
 
   def self.config
-    self.configuration
-    yield(configuration)
+    yield configuration if block_given?
   end
 end
