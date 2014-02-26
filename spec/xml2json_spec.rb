@@ -99,4 +99,9 @@ describe XML2JSON do
       }.to raise_error XML2JSON::InvalidXML
     end
   end
+
+  context "configuration" do
+    it "let's the user choose the key for the attributes" do
+    end
+  end
 end
