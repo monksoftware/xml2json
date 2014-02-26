@@ -117,5 +117,16 @@ describe XML2JSON do
       expect(XML2JSON.configuration.namespaces_key).to eq('names')
       expect(XML2JSON.configuration.text_key).to eq('body')
     end
+
+    it "restores the default values" do
+      XML2JSON.config do |c|
+        c.attributes_key = 'attr'
+      end
+
+      expect(XML2JSON.configuration.attributes_key).to eq('attr')
+      XML2JSON.reset
+
+      expect(XML2JSON.configuration.attributes_key).to eq('_attributes')
+    end
   end
 end
