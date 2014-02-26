@@ -64,4 +64,18 @@ module XML2JSON
       ""
     end
   end
+
+  class << self
+    attr_accessor :configuration
+  end
+
+  class Configuration
+    attr_accessor :attributes_key, :namespaces_key, :text_key
+
+  end
+
+  def self.config
+    self.configuration ||= Configuration.new
+    yield(configuration)
+  end
 end
