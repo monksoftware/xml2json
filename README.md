@@ -26,7 +26,9 @@ end
 
 ## Usage
 
-`XML2JSON.parse(xml_string)`
+```ruby
+XML2JSON.parse(xml_string)
+```
 
 ## Examples
 	
