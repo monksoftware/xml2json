@@ -101,6 +101,12 @@ describe XML2JSON do
   end
 
   context "configuration" do
+    it "provides default values" do
+      expect(XML2JSON.configuration.attributes_key).to eq('_attributes')
+      expect(XML2JSON.configuration.namespaces_key).to eq('_namespaces')
+      expect(XML2JSON.configuration.text_key).to eq('_text')
+    end
+
     it "let's the user choose the keys" do
       XML2JSON.config do |c|
         c.attributes_key = 'attr'

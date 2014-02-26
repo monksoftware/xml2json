@@ -65,17 +65,24 @@ module XML2JSON
     end
   end
 
-  class << self
-    attr_accessor :configuration
-  end
-
   class Configuration
     attr_accessor :attributes_key, :namespaces_key, :text_key
 
+    def initialize
+      self.attributes_key = '_attributes'
+      self.namespaces_key = '_namespaces'
+      self.text_key = '_text'
+    end
+  end
+
+  @@configuration = Configuration.new
+
+  def self.configuration
+    @@configuration
   end
 
   def self.config
-    self.configuration ||= Configuration.new
+    self.configuration
     yield(configuration)
   end
 end
