@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    xml2json (0.0.3)
+    xml2json (0.1.0)
       nokogiri
 
 GEM

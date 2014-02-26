@@ -13,7 +13,7 @@ module XML2JSON
 
     root = doc.root
     hash = { root.name => parse_node(root) }
-    hash[root.name] = { "_namespaces" => root.namespaces }.merge(hash[root.name]) unless root.namespaces.empty?
+    hash[root.name] = { self.configuration.namespaces_key => root.namespaces }.merge(hash[root.name]) unless root.namespaces.empty?
     hash.to_json
   end
 
@@ -22,12 +22,12 @@ module XML2JSON
     if node.element_children.count > 0
       parse_attributes(node).merge(node2json(node))
     else
-      (node.attributes.empty? ? node.text : parse_attributes(node).merge({"_text" => node.text}))
+      (node.attributes.empty? ? node.text : parse_attributes(node).merge({ self.configuration.text_key => node.text}))
     end
   end
 
   def self.parse_attributes(node)
-    node.attributes.empty? ? {} : {"_attributes" => Hash[node.attributes.map { |k, v| [k, v.value] } ]}
+    node.attributes.empty? ? {} : { self.configuration.attributes_key => Hash[node.attributes.map { |k, v| [k, v.value] } ]}
   end
 
   def self.node2json node
@@ -63,5 +63,27 @@ module XML2JSON
     else
       ""
     end
+  end
+
+  class Configuration
+    attr_accessor :attributes_key, :namespaces_key, :text_key
+
+    def initialize
+      self.attributes_key = '_attributes'
+      self.namespaces_key = '_namespaces'
+      self.text_key = '_text'
+    end
+  end
+
+  def self.configuration
+    @configuration ||= Configuration.new
+  end
+
+  def self.config
+    yield configuration if block_given?
+  end
+
+  def self.reset
+    @configuration = Configuration.new
   end
 end

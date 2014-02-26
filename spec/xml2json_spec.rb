@@ -99,4 +99,34 @@ describe XML2JSON do
       }.to raise_error XML2JSON::InvalidXML
     end
   end
+
+  context "configuration" do
+    it "provides default values" do
+      expect(XML2JSON.configuration.attributes_key).to eq('_attributes')
+      expect(XML2JSON.configuration.namespaces_key).to eq('_namespaces')
+      expect(XML2JSON.configuration.text_key).to eq('_text')
+    end
+
+    it "let's the user choose the keys" do
+      XML2JSON.config do |c|
+        c.attributes_key = 'attr'
+        c.namespaces_key = 'names'
+        c.text_key = 'body'
+      end
+      expect(XML2JSON.configuration.attributes_key).to eq('attr')
+      expect(XML2JSON.configuration.namespaces_key).to eq('names')
+      expect(XML2JSON.configuration.text_key).to eq('body')
+    end
+
+    it "restores the default values" do
+      XML2JSON.config do |c|
+        c.attributes_key = 'attr'
+      end
+
+      expect(XML2JSON.configuration.attributes_key).to eq('attr')
+      XML2JSON.reset
+
+      expect(XML2JSON.configuration.attributes_key).to eq('_attributes')
+    end
+  end
 end
