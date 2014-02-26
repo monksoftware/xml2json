@@ -14,7 +14,7 @@ gem 'xml2json', git: 'git@github.com:monksoftware/xml2json.git'
 
 ## Configuration
 
-Attributes, text and namespaces key name can be customized, defaults are "_attribures", "_text" and "_namespaces"
+Attributes, text and namespaces key name can be customized, defaults are `_attributes`, `_text` and `_namespaces`
 
 ```ruby
 XML2JSON.config do |c|
