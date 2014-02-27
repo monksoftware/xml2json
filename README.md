@@ -45,5 +45,5 @@ XML2JSON.parse(xml)
 output
 
 ```json
-{"root":{"author":[{"name":"Andrea", "email":"andrea@wearemonk.com"},{"name":"Giuseppe", "email":"giuseppe@wearemonk.com"}]}}
+{"root":{"authors":[{"name":"Andrea", "email":"andrea@wearemonk.com"},{"name":"Giuseppe", "email":"giuseppe@wearemonk.com"}]}}
 ```
