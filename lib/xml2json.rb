@@ -34,15 +34,15 @@ module XML2JSON
   def self.node2json node
     node.element_children.each_with_object({}) do |child, hash|
       key = namespaced_node_name child
-      pkey = key.pluralize
+      pluralized_key = key.pluralize
 
       if hash.has_key?(key)
         node_to_nodes!(hash, child)
         hash.delete(key)
-        hash[pkey] << parse_node(child)
+        hash[pluralized_key] << parse_node(child)
       else
-        if hash.has_key?(pkey)
-          hash[pkey] << parse_node(child)
+        if hash.has_key?(pluralized_key)
+          hash[pluralized_key] << parse_node(child)
         else
           hash[key] = parse_node(child)
         end
