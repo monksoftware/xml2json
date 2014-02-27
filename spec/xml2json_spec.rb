@@ -16,17 +16,17 @@ describe XML2JSON do
   it "handles multiple elements" do
     xml = '<a><x><b>Primo</b><b>Secondo</b></x></a>'
     expect(XML2JSON.parse(xml)).to(
-      eq({ "a" => { "x" => { "b" => [ "Primo", "Secondo" ] } } }.to_json)
+      eq({ "a" => { "x" => { "bs" => [ "Primo", "Secondo" ] } } }.to_json)
     )
 
     xml = '<a><b><x>Primo</x></b><b><x>Secondo</x></b></a>'
     expect(XML2JSON.parse(xml)).to(
-      eq({ "a" => { "b" => [ { "x" => "Primo" }, { "x" => "Secondo" } ] } }.to_json)
+      eq({ "a" => { "bs" => [ { "x" => "Primo" }, { "x" => "Secondo" } ] } }.to_json)
     )
 
     xml = '<a><b><x>Primo</x></b><b><x>Secondo</x></b><b><x>Terzo</x></b></a>'
     expect(XML2JSON.parse(xml)).to(
-      eq({ "a" => { "b" => [ { "x" => "Primo" }, { "x" => "Secondo" }, { "x" => "Terzo" }] } }.to_json)
+      eq({ "a" => { "bs" => [ { "x" => "Primo" }, { "x" => "Secondo" }, { "x" => "Terzo" }] } }.to_json)
     )
   end
 
@@ -43,12 +43,12 @@ describe XML2JSON do
 
     xml = '<r><a url="www.google.it"></a><a url="www.google.com"></a></r>'
     expect(XML2JSON.parse(xml)).to(
-      eq({"r" => {"a" => [{ "_attributes" => {"url" => "www.google.it"}, "_text" => ""},{ "_attributes" => {"url" => "www.google.com"}, "_text" => ""}]}}.to_json)
+      eq({"r" => {"as" => [{ "_attributes" => {"url" => "www.google.it"}, "_text" => ""},{ "_attributes" => {"url" => "www.google.com"}, "_text" => ""}]}}.to_json)
     )
 
     xml = '<r><a url="www.google.it"><b>ciao</b></a><a url="www.google.com"><b>ciao</b></a></r>'
     expect(XML2JSON.parse(xml)).to(
-      eq({"r" => {"a" => [{ "_attributes" => {"url" => "www.google.it"}, "b" => "ciao"},{ "_attributes" => {"url" => "www.google.com"}, "b" => "ciao"}]}}.to_json)
+      eq({"r" => {"as" => [{ "_attributes" => {"url" => "www.google.it"}, "b" => "ciao"},{ "_attributes" => {"url" => "www.google.com"}, "b" => "ciao"}]}}.to_json)
     )
   end
 
@@ -63,7 +63,7 @@ describe XML2JSON do
     let(:xml) { '<r xmlns:content="http://purl.org/rss/1.0/modules/content/"><content:encoded>Hello</content:encoded><content:encoded>World</content:encoded></r>' }
     it "parses namespaced node names" do
       expect(XML2JSON.parse(xml)).to(
-        eq({"r" => { "_namespaces" => { "xmlns:content" => "http://purl.org/rss/1.0/modules/content/" }, "content:encoded" => [ "Hello", "World" ] } }.to_json)
+        eq({"r" => { "_namespaces" => { "xmlns:content" => "http://purl.org/rss/1.0/modules/content/" }, "content:encodeds" => [ "Hello", "World" ] } }.to_json)
       )
     end
   end
@@ -127,6 +127,15 @@ describe XML2JSON do
       XML2JSON.reset
 
       expect(XML2JSON.configuration.attributes_key).to eq('_attributes')
+    end
+  end
+
+  context "pluralize" do
+    it "pluralizes keys name when multiple nodes" do
+      xml = '<root><item>Primo</item><item>Secondo</item></root>'
+      expect(XML2JSON.parse(xml)).to(
+        eq({ "root" => { "items" => [ "Primo", "Secondo"] } }.to_json)
+      )
     end
   end
 end
