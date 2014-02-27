@@ -33,7 +33,7 @@ describe XML2JSON do
   it "parses node attributes" do
     xml = '<r><a url="www.google.it"></a></r>'
     expect(XML2JSON.parse(xml)).to(
-      eq({"r" => {"a" => { "_attributes" => {"url" => "www.google.it"}, "_text" => ""}}}.to_json)
+      eq({"r" => {"a" => { "_attributes" => {"url" => "www.google.it"}}}}.to_json)
     )
 
     xml = '<r><a url="www.google.it"><b>ciao</b></a></r>'
@@ -43,12 +43,19 @@ describe XML2JSON do
 
     xml = '<r><a url="www.google.it"></a><a url="www.google.com"></a></r>'
     expect(XML2JSON.parse(xml)).to(
-      eq({"r" => {"as" => [{ "_attributes" => {"url" => "www.google.it"}, "_text" => ""},{ "_attributes" => {"url" => "www.google.com"}, "_text" => ""}]}}.to_json)
+      eq({"r" => {"as" => [{ "_attributes" => {"url" => "www.google.it"}},{ "_attributes" => {"url" => "www.google.com"}}]}}.to_json)
     )
 
     xml = '<r><a url="www.google.it"><b>ciao</b></a><a url="www.google.com"><b>ciao</b></a></r>'
     expect(XML2JSON.parse(xml)).to(
       eq({"r" => {"as" => [{ "_attributes" => {"url" => "www.google.it"}, "b" => "ciao"},{ "_attributes" => {"url" => "www.google.com"}, "b" => "ciao"}]}}.to_json)
+    )
+  end
+
+  it "does not add the _text key when a node has no text" do
+    xml = '<r><a url="www.google.it" /></r>'
+    expect(XML2JSON.parse(xml)).to(
+      eq({ "r" => { "a" => { "_attributes" => { "url" => "www.google.it" } } } }.to_json)
     )
   end
 

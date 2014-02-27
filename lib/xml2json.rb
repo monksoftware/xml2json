@@ -23,8 +23,13 @@ module XML2JSON
     if node.element_children.count > 0
       parse_attributes(node).merge(node2json(node))
     else
-      (node.attributes.empty? ? node.text : parse_attributes(node).merge({ self.configuration.text_key => node.text}))
+      (node.attributes.empty? ? node.text : parse_attributes(node).merge(text_hash(node)))
     end
+  end
+
+  def self.text_hash(node)
+    return {} if node.text.strip.empty?
+    { self.configuration.text_key => node.text }
   end
 
   def self.parse_attributes(node)
