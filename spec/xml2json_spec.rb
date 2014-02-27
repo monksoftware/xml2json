@@ -52,6 +52,13 @@ describe XML2JSON do
     )
   end
 
+  it "does not add the _text key when a node has no text" do
+    xml = '<r><a url="www.google.it" /></r>'
+    expect(XML2JSON.parse(xml)).to(
+      eq({ "r" => { "a" => { "_attributes" => { "url" => "www.google.it" } } } }.to_json)
+    )
+  end
+
   it "parses root attributes" do
     xml = '<r id="1"><a>Hello</a></r>'
     expect(XML2JSON.parse(xml)).to(
