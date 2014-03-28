@@ -57,6 +57,10 @@ output is a string
 
 ### Parse to Ruby Hash
 
+```
+XML2JSON.parse_to_hash(xml)
+```
+
 output is a hash
 
 ```ruby
