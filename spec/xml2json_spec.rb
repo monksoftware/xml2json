@@ -3,6 +3,10 @@ require 'spec_helper'
 require 'xml2json'
 
 describe XML2JSON do
+  before do
+    @xml = '<a></a>'
+  end
+
   it "parses xml into json" do
     xml = '<a><b><c>Hello</c><d>World</d></b></a>'
     json = { "a" => { "b" => { "c" => "Hello", "d" => "World" } } }.to_json
@@ -108,10 +112,8 @@ describe XML2JSON do
   end
 
   context "configuration" do
-    it "provides default values" do
-      expect(XML2JSON.configuration.attributes_key).to eq('_attributes')
-      expect(XML2JSON.configuration.namespaces_key).to eq('_namespaces')
-      expect(XML2JSON.configuration.text_key).to eq('_text')
+    after do
+      XML2JSON.reset
     end
 
     it "let's the user choose the keys" do
@@ -123,6 +125,12 @@ describe XML2JSON do
       expect(XML2JSON.configuration.attributes_key).to eq('attr')
       expect(XML2JSON.configuration.namespaces_key).to eq('names')
       expect(XML2JSON.configuration.text_key).to eq('body')
+    end
+
+    it "provides default values" do
+      expect(XML2JSON.configuration.attributes_key).to eq('_attributes')
+      expect(XML2JSON.configuration.namespaces_key).to eq('_namespaces')
+      expect(XML2JSON.configuration.text_key).to eq('_text')
     end
 
     it "restores the default values" do
