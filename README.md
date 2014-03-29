@@ -27,23 +27,42 @@ end
 ## Usage
 
 ```ruby
-XML2JSON.parse(xml_string)
+XML2JSON.parse(xml_string)         # => this outputs a json string
+XML2JSON.parse_to_hash(xml_string) # => this outputs a ruby hash
 ```
 
 ## Examples
-	
+
+### Input XML
+
 ```ruby
 xml = '<?xml version="1.0" encoding="utf-8"?>
 		<root>
 	   		<author><name>Andrea</name><email>andrea@wearemonk.com</email></author>
 	   		<author><name>Giuseppe</name><email>giuseppe@wearemonk.com</email></author>
 	   	</root>'
+```
 
+### Parse to JSON string
+
+```
 XML2JSON.parse(xml)
 ```
 
-output
+output is a string
 
 ```json
 {"root":{"authors":[{"name":"Andrea", "email":"andrea@wearemonk.com"},{"name":"Giuseppe", "email":"giuseppe@wearemonk.com"}]}}
+```
+
+### Parse to Ruby Hash
+
+```
+XML2JSON.parse_to_hash(xml)
+```
+
+output is a hash
+
+```ruby
+{"root" => {"authors" => [{"name" => "Andrea", "email" => "andrea@wearemonk.com"},{"name" => "Giuseppe", "email" => "giuseppe@wearemonk.com"}]}}
 ```

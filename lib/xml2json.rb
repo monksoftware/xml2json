@@ -6,6 +6,10 @@ module XML2JSON
   class InvalidXML < StandardError; end
 
   def self.parse xml
+    parse_to_hash(xml).to_json
+  end
+
+  def self.parse_to_hash xml
     begin
       doc = Nokogiri.XML(xml) { |config| config.strict }
     rescue Nokogiri::XML::SyntaxError
@@ -15,7 +19,7 @@ module XML2JSON
     root = doc.root
     hash = { root.name => parse_node(root) }
     hash[root.name] = { self.configuration.namespaces_key => root.namespaces }.merge(hash[root.name]) unless root.namespaces.empty?
-    hash.to_json
+    hash
   end
 
 

@@ -3,111 +3,126 @@ require 'spec_helper'
 require 'xml2json'
 
 describe XML2JSON do
-  before do
-    @xml = '<a></a>'
+  describe ".parse" do
+    it 'jsonifies parsed hash' do
+      expect(XML2JSON).to receive(:parse_to_hash).with('xml').and_return({"key" => "value"})
+      expect(XML2JSON.parse('xml')).to eq('{"key":"value"}')
+    end
+
+    context "rss" do
+      let(:rss) { SpecHelpers.open_fixture_file('rss.xml') }
+      let(:json) { SpecHelpers.open_fixture_file('rss.json').delete("\n") }
+
+      it "parses the rss into json" do
+        hash = XML2JSON.parse(rss)
+        expect(hash).to eq(json)
+      end
+    end
+
+    context "atom" do
+      let(:atom) { SpecHelpers.open_fixture_file('atom.xml') }
+      let(:json) { SpecHelpers.open_fixture_file('atom.json').delete("\n") }
+
+      it "parses the atom into json" do
+        expect(XML2JSON.parse(atom)).to eq(json)
+      end
+    end
   end
 
-  it "parses xml into json" do
-    xml = '<a><b><c>Hello</c><d>World</d></b></a>'
-    json = { "a" => { "b" => { "c" => "Hello", "d" => "World" } } }.to_json
-    expect(XML2JSON.parse(xml)).to eq(json)
+  describe ".parse_to_hash" do
+    it "parses xml into hash" do
+      xml = '<a><b><c>Hello</c><d>World</d></b></a>'
+      json = { "a" => { "b" => { "c" => "Hello", "d" => "World" } } }
+      expect(XML2JSON.parse_to_hash(xml)).to eq(json)
 
-    xml = '<a><b><x>Io</x><c><d>Hello</d><e>World</e></c></b></a>'
-    json = { "a" => { "b" => { "x" => "Io", "c" => { "d" => "Hello", "e" => "World" } } } }.to_json
-    expect(XML2JSON.parse(xml)).to eq(json)
-  end
+      xml = '<a><b><x>Io</x><c><d>Hello</d><e>World</e></c></b></a>'
+      json = { "a" => { "b" => { "x" => "Io", "c" => { "d" => "Hello", "e" => "World" } } } }
+      expect(XML2JSON.parse_to_hash(xml)).to eq(json)
+    end
 
-  it "handles multiple elements" do
-    xml = '<a><x><b>Primo</b><b>Secondo</b></x></a>'
-    expect(XML2JSON.parse(xml)).to(
-      eq({ "a" => { "x" => { "bs" => [ "Primo", "Secondo" ] } } }.to_json)
-    )
+    it "handles multiple elements" do
+      xml = '<a><x><b>Primo</b><b>Secondo</b></x></a>'
+      expect(XML2JSON.parse_to_hash(xml)).to(
+        eq({ "a" => { "x" => { "bs" => [ "Primo", "Secondo" ] } } })
+      )
 
-    xml = '<a><b><x>Primo</x></b><b><x>Secondo</x></b></a>'
-    expect(XML2JSON.parse(xml)).to(
-      eq({ "a" => { "bs" => [ { "x" => "Primo" }, { "x" => "Secondo" } ] } }.to_json)
-    )
+      xml = '<a><b><x>Primo</x></b><b><x>Secondo</x></b></a>'
+      expect(XML2JSON.parse_to_hash(xml)).to(
+        eq({ "a" => { "bs" => [ { "x" => "Primo" }, { "x" => "Secondo" } ] } })
+      )
 
-    xml = '<a><b><x>Primo</x></b><b><x>Secondo</x></b><b><x>Terzo</x></b></a>'
-    expect(XML2JSON.parse(xml)).to(
-      eq({ "a" => { "bs" => [ { "x" => "Primo" }, { "x" => "Secondo" }, { "x" => "Terzo" }] } }.to_json)
-    )
-  end
-
-  it "parses node attributes" do
-    xml = '<r><a url="www.google.it"></a></r>'
-    expect(XML2JSON.parse(xml)).to(
-      eq({"r" => {"a" => { "_attributes" => {"url" => "www.google.it"}}}}.to_json)
-    )
-
-    xml = '<r><a url="www.google.it"><b>ciao</b></a></r>'
-    expect(XML2JSON.parse(xml)).to(
-      eq({"r" => {"a" => { "_attributes" => {"url" => "www.google.it"}, "b" => "ciao"}}}.to_json)
-    )
-
-    xml = '<r><a url="www.google.it"></a><a url="www.google.com"></a></r>'
-    expect(XML2JSON.parse(xml)).to(
-      eq({"r" => {"as" => [{ "_attributes" => {"url" => "www.google.it"}},{ "_attributes" => {"url" => "www.google.com"}}]}}.to_json)
-    )
-
-    xml = '<r><a url="www.google.it"><b>ciao</b></a><a url="www.google.com"><b>ciao</b></a></r>'
-    expect(XML2JSON.parse(xml)).to(
-      eq({"r" => {"as" => [{ "_attributes" => {"url" => "www.google.it"}, "b" => "ciao"},{ "_attributes" => {"url" => "www.google.com"}, "b" => "ciao"}]}}.to_json)
-    )
-  end
-
-  it "does not add the _text key when a node has no text" do
-    xml = '<r><a url="www.google.it" /></r>'
-    expect(XML2JSON.parse(xml)).to(
-      eq({ "r" => { "a" => { "_attributes" => { "url" => "www.google.it" } } } }.to_json)
-    )
-  end
-
-  it "parses root attributes" do
-    xml = '<r id="1"><a>Hello</a></r>'
-    expect(XML2JSON.parse(xml)).to(
-      eq({"r" => {"_attributes" => { "id" => "1" }, "a" => "Hello" } }.to_json)
-    )
-  end
-
-  context "namespaces" do
-    let(:xml) { '<r xmlns:content="http://purl.org/rss/1.0/modules/content/"><content:encoded>Hello</content:encoded><content:encoded>World</content:encoded></r>' }
-    it "parses namespaced node names" do
-      expect(XML2JSON.parse(xml)).to(
-        eq({"r" => { "_namespaces" => { "xmlns:content" => "http://purl.org/rss/1.0/modules/content/" }, "content:encodeds" => [ "Hello", "World" ] } }.to_json)
+      xml = '<a><b><x>Primo</x></b><b><x>Secondo</x></b><b><x>Terzo</x></b></a>'
+      expect(XML2JSON.parse_to_hash(xml)).to(
+        eq({ "a" => { "bs" => [ { "x" => "Primo" }, { "x" => "Secondo" }, { "x" => "Terzo" }] } })
       )
     end
-  end
 
-  context "rss" do
-    let(:rss) { SpecHelpers.open_fixture_file('rss.xml') }
-    let(:json) { SpecHelpers.open_fixture_file('rss.json').delete("\n") }
+    it "parses node attributes" do
+      xml = '<r><a url="www.google.it"></a></r>'
+      expect(XML2JSON.parse_to_hash(xml)).to(
+        eq({"r" => {"a" => { "_attributes" => {"url" => "www.google.it"}}}})
+      )
 
-    it "parses the rss into json" do
-      expect(XML2JSON.parse(rss)).to eq(json)
+      xml = '<r><a url="www.google.it"><b>ciao</b></a></r>'
+      expect(XML2JSON.parse_to_hash(xml)).to(
+        eq({"r" => {"a" => { "_attributes" => {"url" => "www.google.it"}, "b" => "ciao"}}})
+      )
+
+      xml = '<r><a url="www.google.it"></a><a url="www.google.com"></a></r>'
+      expect(XML2JSON.parse_to_hash(xml)).to(
+        eq({"r" => {"as" => [{ "_attributes" => {"url" => "www.google.it"}},{ "_attributes" => {"url" => "www.google.com"}}]}})
+      )
+
+      xml = '<r><a url="www.google.it"><b>ciao</b></a><a url="www.google.com"><b>ciao</b></a></r>'
+      expect(XML2JSON.parse_to_hash(xml)).to(
+        eq({"r" => {"as" => [{ "_attributes" => {"url" => "www.google.it"}, "b" => "ciao"},{ "_attributes" => {"url" => "www.google.com"}, "b" => "ciao"}]}})
+      )
     end
-  end
 
-  context "atom" do
-    let(:atom) { SpecHelpers.open_fixture_file('atom.xml') }
-    let(:json) { SpecHelpers.open_fixture_file('atom.json').delete("\n") }
-
-    it "parses the atom into json" do
-      expect(XML2JSON.parse(atom)).to eq(json)
+    it "does not add the _text key when a node has no text" do
+      xml = '<r><a url="www.google.it" /></r>'
+      expect(XML2JSON.parse_to_hash(xml)).to(
+        eq({ "r" => { "a" => { "_attributes" => { "url" => "www.google.it" } } } })
+      )
     end
-  end
 
-  context "invalid xml file" do
-    it "raises an exception if the xml file is bad formed" do
-      xml = '<invalid></xml>'
-      expect {
-        XML2JSON.parse(xml)
-      }.to raise_error XML2JSON::InvalidXML
+    it "parses root attributes" do
+      xml = '<r id="1"><a>Hello</a></r>'
+      expect(XML2JSON.parse_to_hash(xml)).to(
+        eq({"r" => {"_attributes" => { "id" => "1" }, "a" => "Hello" } })
+      )
+    end
 
-      xml = 'not xml file'
-      expect {
-        XML2JSON.parse(xml)
-      }.to raise_error XML2JSON::InvalidXML
+    context "namespaces" do
+      let(:xml) { '<r xmlns:content="http://purl.org/rss/1.0/modules/content/"><content:encoded>Hello</content:encoded><content:encoded>World</content:encoded></r>' }
+      it "parses namespaced node names" do
+        expect(XML2JSON.parse_to_hash(xml)).to(
+          eq({"r" => { "_namespaces" => { "xmlns:content" => "http://purl.org/rss/1.0/modules/content/" }, "content:encodeds" => [ "Hello", "World" ] } })
+        )
+      end
+    end
+
+    context "invalid xml file" do
+      it "raises an exception if the xml file is bad formed" do
+        xml = '<invalid></xml>'
+        expect {
+          XML2JSON.parse_to_hash(xml)
+        }.to raise_error XML2JSON::InvalidXML
+
+        xml = 'not xml file'
+        expect {
+          XML2JSON.parse_to_hash(xml)
+        }.to raise_error XML2JSON::InvalidXML
+      end
+    end
+
+    context "pluralize" do
+      it "pluralizes keys name when multiple nodes" do
+        xml = '<root><item>Primo</item><item>Secondo</item></root>'
+        expect(XML2JSON.parse_to_hash(xml)).to(
+          eq({ "root" => { "items" => [ "Primo", "Secondo"] } })
+        )
+      end
     end
   end
 
@@ -142,15 +157,6 @@ describe XML2JSON do
       XML2JSON.reset
 
       expect(XML2JSON.configuration.attributes_key).to eq('_attributes')
-    end
-  end
-
-  context "pluralize" do
-    it "pluralizes keys name when multiple nodes" do
-      xml = '<root><item>Primo</item><item>Secondo</item></root>'
-      expect(XML2JSON.parse(xml)).to(
-        eq({ "root" => { "items" => [ "Primo", "Secondo"] } }.to_json)
-      )
     end
   end
 end
