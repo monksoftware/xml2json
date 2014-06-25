@@ -1,6 +1,7 @@
 require 'nokogiri'
 require 'json'
 require 'active_support/inflector'
+require_relative './xml2json/configuration'
 
 module XML2JSON
   class InvalidXML < StandardError; end
@@ -78,16 +79,6 @@ module XML2JSON
       "#{node.namespace.prefix}:"
     else
       ""
-    end
-  end
-
-  class Configuration
-    attr_accessor :attributes_key, :namespaces_key, :text_key
-
-    def initialize
-      self.attributes_key = '_attributes'
-      self.namespaces_key = '_namespaces'
-      self.text_key = '_text'
     end
   end
 
