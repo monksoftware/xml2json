@@ -41,19 +41,19 @@ describe XML2JSON do
     end
 
     it "handles multiple elements" do
-      xml = '<a><x><b>Primo</b><b>Secondo</b></x></a>'
+      xml = '<a><x><b>First</b><b>Second</b></x></a>'
       expect(XML2JSON.parse_to_hash(xml)).to(
-        eq({ "a" => { "x" => { "bs" => [ "Primo", "Secondo" ] } } })
+        eq({ "a" => { "x" => { "bs" => [ "First", "Second" ] } } })
       )
 
-      xml = '<a><b><x>Primo</x></b><b><x>Secondo</x></b></a>'
+      xml = '<a><b><x>First</x></b><b><x>Second</x></b></a>'
       expect(XML2JSON.parse_to_hash(xml)).to(
-        eq({ "a" => { "bs" => [ { "x" => "Primo" }, { "x" => "Secondo" } ] } })
+        eq({ "a" => { "bs" => [ { "x" => "First" }, { "x" => "Second" } ] } })
       )
 
-      xml = '<a><b><x>Primo</x></b><b><x>Secondo</x></b><b><x>Terzo</x></b></a>'
+      xml = '<a><b><x>First</x></b><b><x>Second</x></b><b><x>Third</x></b></a>'
       expect(XML2JSON.parse_to_hash(xml)).to(
-        eq({ "a" => { "bs" => [ { "x" => "Primo" }, { "x" => "Secondo" }, { "x" => "Terzo" }] } })
+        eq({ "a" => { "bs" => [ { "x" => "First" }, { "x" => "Second" }, { "x" => "Third" }] } })
       )
     end
 
@@ -63,9 +63,9 @@ describe XML2JSON do
         eq({"r" => {"a" => { "_attributes" => {"url" => "www.google.it"}}}})
       )
 
-      xml = '<r><a url="www.google.it"><b>ciao</b></a></r>'
+      xml = '<r><a url="www.google.it"><b>Hello</b></a></r>'
       expect(XML2JSON.parse_to_hash(xml)).to(
-        eq({"r" => {"a" => { "_attributes" => {"url" => "www.google.it"}, "b" => "ciao"}}})
+        eq({"r" => {"a" => { "_attributes" => {"url" => "www.google.it"}, "b" => "Hello"}}})
       )
 
       xml = '<r><a url="www.google.it"></a><a url="www.google.com"></a></r>'
@@ -73,9 +73,9 @@ describe XML2JSON do
         eq({"r" => {"as" => [{ "_attributes" => {"url" => "www.google.it"}},{ "_attributes" => {"url" => "www.google.com"}}]}})
       )
 
-      xml = '<r><a url="www.google.it"><b>ciao</b></a><a url="www.google.com"><b>ciao</b></a></r>'
+      xml = '<r><a url="www.google.it"><b>Hello</b></a><a url="www.google.com"><b>Hello</b></a></r>'
       expect(XML2JSON.parse_to_hash(xml)).to(
-        eq({"r" => {"as" => [{ "_attributes" => {"url" => "www.google.it"}, "b" => "ciao"},{ "_attributes" => {"url" => "www.google.com"}, "b" => "ciao"}]}})
+        eq({"r" => {"as" => [{ "_attributes" => {"url" => "www.google.it"}, "b" => "Hello"},{ "_attributes" => {"url" => "www.google.com"}, "b" => "Hello"}]}})
       )
     end
 
@@ -118,16 +118,16 @@ describe XML2JSON do
 
     context "pluralize" do
       it "pluralizes keys name when multiple nodes" do
-        xml = '<root><item>Primo</item><item>Secondo</item></root>'
+        xml = '<root><item>First</item><item>Second</item></root>'
         expect(XML2JSON.parse_to_hash(xml)).to(
-          eq({ "root" => { "items" => [ "Primo", "Secondo"] } })
+          eq({ "root" => { "items" => [ "First", "Second"] } })
         )
       end
 
       it "works with already plural keys names" do
-        xml = '<root><items>Primo</items><items>Secondo</items></root>'
+        xml = '<root><items>First</items><items>Second</items></root>'
         expect(XML2JSON.parse_to_hash(xml)).to(
-          eq({ "root" => { "items" => [ "Primo", "Secondo"] } })
+          eq({ "root" => { "items" => [ "First", "Second"] } })
         )
       end
     end
