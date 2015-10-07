@@ -123,6 +123,13 @@ describe XML2JSON do
           eq({ "root" => { "items" => [ "Primo", "Secondo"] } })
         )
       end
+
+      it "works with already plural keys names" do
+        xml = '<root><items>Primo</items><items>Secondo</items></root>'
+        expect(XML2JSON.parse_to_hash(xml)).to(
+          eq({ "root" => { "items" => [ "Primo", "Secondo"] } })
+        )
+      end
     end
   end
 
