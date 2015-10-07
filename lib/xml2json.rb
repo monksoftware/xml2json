@@ -48,7 +48,7 @@ module XML2JSON
 
       if hash.has_key?(key)
         node_to_nodes!(hash, child)
-        hash.delete(key)
+        hash.delete(key) unless key == pluralized_key
         hash[pluralized_key] << parse_node(child)
       else
         if hash.has_key?(pluralized_key)
